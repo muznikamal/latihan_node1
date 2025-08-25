@@ -1,18 +1,18 @@
 import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
-export const getAllSiswa = async (req, res) => {
+export const getAllBarang = async (req, res) => {
   try {
-    const response = await prisma.datasiswa.findMany();
+    const response = await prisma.databarang.findMany();
     res.status(200).json(response);
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
 };
 
-export const getSiswaById = async (req, res) => {
+export const getBarangById = async (req, res) => {
   try {
-    const response = await prisma.datasiswa.findUnique({
+    const response = await prisma.databarang.findUnique({
       where: {
         id: Number(req.params.id),
       },
@@ -23,13 +23,14 @@ export const getSiswaById = async (req, res) => {
   }
 };
 
-export const createSiswa = async (req, res) => {
-  const { nama, umur } = req.body;
+export const createBarang = async (req, res) => {
+  const { nama_barang, stok, harga } = req.body;
   try {
-    const response = await prisma.datasiswa.create({
+    const response = await prisma.databarang.create({
       data: {
-        nama: nama,
-        umur: umur,
+        nama_barang: nama_barang,
+        stok: stok,
+        harga: harga,
       },
     });
     res.status(200).json(response);
@@ -38,15 +39,16 @@ export const createSiswa = async (req, res) => {
   }
 };
 
-export const updateSiswa = async (req, res) => {
+export const updateBarang = async (req, res) => {
   try {
-    const response = await prisma.datasiswa.update({
+    const response = await prisma.databarang.update({
       where: {
         id: Number(req.params.id),
       },
       data: {
-        nama: req.body.nama,
-        umur: req.body.umur,
+        nama_barang: req.body.nama_barang,
+        stok: req.body.stok,
+        harga: req.body.harga,
       },
     });
     res.status(200).json(response);
@@ -55,9 +57,9 @@ export const updateSiswa = async (req, res) => {
   }
 };
 
-export const deleteSiswa = async (req, res) => {
+export const deleteBarang = async (req, res) => {
   try {
-    const response = await prisma.datasiswa.delete({
+    const response = await prisma.databarang.delete({
       where: {
         id: Number(req.params.id),
       },
