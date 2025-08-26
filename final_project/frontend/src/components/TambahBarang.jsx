@@ -13,7 +13,7 @@ const TambahBarang = () => {
     await axios.post("http://localhost:8000/barang", {
       nama_barang,
       stok: Number(stok),
-      harga: Number(harga)
+      harga: Number(harga),
     });
     navigate("/");
   };
@@ -40,7 +40,7 @@ const TambahBarang = () => {
           </div>
           <div className="mb-6">
             <label className="block mb-2 font-semibold text-gray-700">
-              stok
+              Stok
             </label>
             <input
               type="number"

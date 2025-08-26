@@ -57,6 +57,39 @@ export const updateBarang = async (req, res) => {
   }
 };
 
+export const updateStok = async (req, res) => {
+  try {
+    const id = Number(req.params.id);
+    const { jumlah, tipe } = req.body; // jumlah = angka, tipe = "tambah"/"kurang"
+
+    // ambil stok lama dulu biar bisa validasi
+    const barang = await prisma.databarang.findUnique({
+      where: { id },
+    });
+
+    if (!barang) {
+      return res.status(404).json({ message: "Barang tidak ditemukan" });
+    }
+
+    // validasi stok
+    if (tipe === "kurang" && barang.stok < jumlah) {
+      return res.status(400).json({ message: "Stok tidak mencukupi!" });
+    }
+
+    // update stok dengan atomic operation
+    const response = await prisma.databarang.update({
+      where: { id },
+      data: {
+        stok: tipe === "tambah" ? { increment: jumlah } : { decrement: jumlah },
+      },
+    });
+
+    res.status(200).json(response);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
+
 export const deleteBarang = async (req, res) => {
   try {
     const response = await prisma.databarang.delete({
